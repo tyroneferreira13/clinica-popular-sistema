@@ -61,8 +61,6 @@ Alguns pontos que serão observados:
 - funções importantes fáceis de encontrar;
 - informações que não dependam somente de cores.
 
-Será utilizado um checklist para organizar essas verificações.
-
 ### 2.6 Suporte ao usuário
 
 O suporte terá como objetivo ajudar pacientes que tenham dúvidas ou problemas ao utilizar a plataforma.
@@ -73,27 +71,43 @@ Primeiro será identificado qual é a dificuldade do paciente. Caso seja apenas 
 
 ## 3. Plano de Testes
 
-| Teste | Situação | Resultado esperado |
-|---|---|---|
-| 01 | Agendar em horário disponível | Consulta agendada |
-| 02 | Agendar em horário ocupado | Sistema impede o agendamento |
-| 03 | Cancelar uma consulta | Consulta cancelada |
-| 04 | Visualizar agendamentos | Agendamentos aparecem corretamente |
-| 05 | Deixar campo obrigatório vazio | Sistema informa o problema |
-| 06 | Cancelar uma consulta | Horário fica disponível novamente |
-| 07 | Consulta próxima | Paciente recebe o lembrete |
+Para verificar a qualidade da plataforma serão utilizados diferentes tipos de testes dependendo da situação.
+
+### Teste Funcional
+
+O teste funcional será utilizado para verificar se as principais funções da plataforma estão funcionando como deveriam.
+
+Nesse teste será verificado por exemplo se o paciente consegue realizar um agendamento em um horário disponível, cancelar uma consulta e visualizar seus agendamentos corretamente.
+
+### Teste de Validação
+
+O teste de validação será utilizado principalmente nos campos preenchidos pelo usuário.
+
+Será testado por exemplo oque acontece quando o paciente deixa um campo obrigatório vazio ou coloca alguma informação de forma incorreta. O sistema deverá informar o problema para que o usuário consiga corrigir.
+
+### Teste Exploratório
+
+O teste exploratório será feito utilizando a plataforma de forma mais livre, sem seguir apenas um caminho definido.
+
+A ideia é navegar pelas funções do sistema, realizar diferentes ações e tentar encontrar erros ou situações que talvez não tenham sido previstas nos outros testes.
+
+### Teste de Regressão
+
+O teste de regressão será utilizado quando alguma alteração ou correção for feita na plataforma.
+
+Depois da alteração serão testadas novamente funções que já estavam funcionando, como agendamento e cancelamento, para verificar se a mudança não acabou causando algum problema em outra parte do sistema.
 
 ---
 
-## 4. Checklist de Acessibilidade
+## 4. Acessibilidade
 
-- [ ] Textos e informações são claros;
-- [ ] botões são fáceis de identificar;
-- [ ] campos possuem identificação;
-- [ ] mensagens de erro são compreensíveis;
-- [ ] funções principais são fáceis de encontrar;
-- [ ] informações importantes não dependem apenas de cores;
-- [ ] agendamento e cancelamento são simples de utilizar.
+Na parte de acessibilidade será verificado se a plataforma é simples de entender e utilizar pelos pacientes.
+
+Os textos e informações devem ser claros, os botões precisam ter funções faceis de identificar e os campos dos formulários devem mostrar corretamente quais informações precisam ser preenchidas.
+
+Também será observado se as mensagens de erro são compreensíveis e ajudam o paciente a entender oque aconteceu. As principais funções como agendamento e cancelamento devem ser fáceis de encontrar.
+
+Outro ponto importante é evitar que informações importantes dependam somente de cores, já que alguns usuários podem ter dificuldades para diferenciar determinadas cores.
 
 ---
 
@@ -113,17 +127,20 @@ O atendimento deverá seguir algumas etapas:
 ## 6. Responsabilidades
 
 ### QA
+
 - Planejar os testes;
 - verificar as funções do sistema;
 - identificar e registrar falhas;
 - informar os problemas encontrados.
 
 ### Acessibilidade
+
 - Verificar se as informações são claras;
 - analisar a facilidade de uso;
-- utilizar o checklist de acessibilidade.
+- verificar possíveis dificuldades de acessibilidade.
 
 ### Suporte
+
 - Ajudar pacientes com dificuldades;
 - registrar problemas relatados;
 - encaminhar problemas técnicos.
