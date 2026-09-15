@@ -1,7 +1,5 @@
-Participando do projeto da SOLUTECH fiquei responsavel pelas áreas de QA, acessibilidade e suporte ao usuário. Durante o projeto fui entendendo melhor que não basta o sistema apenas funcionar, ele também precisa ser simples e não causar dificuldades pra quem vai usar.
+Participando do projeto da SOLUTECH fiquei responsavel pelas áreas de QA, acessibilidade e suporte ao usuário. Na parte de QA trabalhei no planejamento de testes funcional, validação, exploratório e regressão, pensando em agendamentos, cancelamentos e possiveis falhas no sistema.
 
-Na parte de QA pensei em testes para coisas como agendamento e cancelamento de consultas, campos preenchidos errado e possíveis falhas que podem acontecer durante o uso. Também trabalhei com acessibilidade, pensando em textos mais claros, botões faceis de entender e mensagens que realmente expliquem oque aconteceu.
+Também trabalhei com acessibilidade e suporte, buscando deixar a plataforma mais facil de usar e ajudar os pacientes em possíveis dificuldades.
 
-No suporte, a ideia foi pensar em como ajudar os pacientes quando tiverem alguma dificuldade e encaminhar os problemas para a equipe responsavel.
-
-Foi uma experiencia legal porque consegui entender melhor a importancia dos testes e como pequenos detalhes podem fazer bastante diferença pra quem usa o sistema.
+Com esse projeto consegui entender melhor a importancia dos testes e da experiencia do usuário para deixar um sistema mais confiavel.
