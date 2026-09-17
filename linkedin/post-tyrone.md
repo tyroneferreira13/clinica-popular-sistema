@@ -1,0 +1,9 @@
+Nas últimas semanas venho atuando no time da Solutech no desenvolvimento de uma plataforma para a Rede Cuidar+ e acabei ficando responsável pela parte de Back-end do projeto. Uma das coisas que mais tem me chamado atenção nessa etapa é perceber que o Back-end não se resume apenas a fazer o sistema funcionar, mas principalmente a entender como as informações chegam, são validadas e como as regras precisam ser aplicadas antes de qualquer coisa acontecer.
+
+Um dos pontos que mais tenho aprendido é justamente essa comunicação entre as diferentes partes do sistema. O Front-end precisa enviar as informações, a API precisa receber e processar esses dados e, depois, tudo precisa conversar corretamente com o banco de dados. Foi nesse processo que comecei a entender melhor na prática conceitos como API, JSON, requisições HTTP e as regras que existem por trás de uma funcionalidade aparentemente simples, como realizar um agendamento.
+
+Também foi interessante perceber a importância da segurança nesse tipo de sistema. Como estamos trabalhando com uma plataforma voltada para clínicas, existem informações que precisam ser tratadas com bastante cuidado. Por isso, questões como autenticação, controle de acesso e LGPD também precisam ser consideradas desde a estruturação do projeto.
+
+É uma parte que muitas vezes não aparece para quem está utilizando o sistema, mas que acaba sendo responsável por fazer toda a aplicação funcionar de forma organizada. Para mim, que ainda estou construindo minha experiência na área de programação, está sendo uma oportunidade importante para começar a enxergar o desenvolvimento de software de uma forma mais prática e entender como cada parte do sistema depende da outra.
+
+#ADS #Backend #NodeJS #Express #DesenvolvimentoDeSoftware #Programação #Tecnologia #ProjetoAcademico
