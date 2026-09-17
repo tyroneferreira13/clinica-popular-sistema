@@ -1,110 +1,276 @@
-# Escopo do Back-end
+Escopo do Back-end
 
-## 1. Objetivo
+1. Objetivo
 
-O Back-end vai ser responsável pela parte do sistema que fica por trás da aplicação. Ele vai receber as informações enviadas pelo usuário, verificar os dados, fazer os processos necessários e depois enviar uma resposta para o Front-end.
+O Back-end será responsável pela parte do sistema que fica por trás da aplicação. Ele vai receber as informações enviadas pelo Front-end, verificar os dados, realizar os processos necessários e devolver uma resposta.
 
-A ideia é que o Back-end faça essa comunicação de forma organizada, cuidando do processamento das informações e das regras que forem definidas para o sistema.
+Para esse projeto, será utilizado Node.js junto com o Express, que será utilizado para organizar e criar a API do sistema.
 
-## 2. O que o Back-end deverá fazer
+O Back-end também ficará responsável pelas regras do sistema e pela comunicação com o banco de dados.
 
-### 2.1 API
+---
 
-Será desenvolvida uma API para fazer a comunicação entre o Front-end e o Back-end.
+2. Tecnologias utilizadas
 
-A API vai receber as solicitações feitas pelo sistema, processar essas informações e retornar uma resposta.
+Para o desenvolvimento do Back-end serão utilizadas:
 
-Os principais métodos HTTP que poderão ser utilizados são:
+- Node.js: utilizado para executar o código do Back-end;
+- Express: utilizado para criar e organizar a API;
+- JSON: utilizado para enviar e receber informações entre o Front-end e a API;
+- Banco de dados SQL: utilizado para armazenar as informações do sistema.
 
-* GET, para consultar informações;
-* POST, para cadastrar informações;
-* PUT, para atualizar informações;
-* DELETE, para excluir informações.
+A escolha dessas tecnologias permite criar uma API para que o Front-end consiga se comunicar com o Back-end de forma organizada.
 
-### 2.2 Usuários
+---
 
-Caso o sistema utilize usuários, o Back-end deverá cuidar das operações relacionadas a eles, como:
+3. O que o Back-end deverá fazer
 
-* Fazer o cadastro;
-* Consultar os usuários;
-* Alterar informações;
-* Excluir usuários;
-* Verificar se os dados informados estão corretos.
+3.1 API
 
-### 2.3 Login e acesso
+O Back-end terá uma API responsável pela comunicação com o Front-end.
 
-Se o projeto precisar de login, o Back-end também será responsavel por verificar os dados de acesso dos usuários.
+A API receberá as solicitações, processará as informações e retornará uma resposta.
 
-Também deverá controlar o acesso às partes do sistema que precisam de autenticação.
+Os principais métodos HTTP utilizados serão:
 
-### 2.4 Regras do sistema
+- GET: consultar informações;
+- POST: cadastrar informações;
+- PUT: atualizar informações;
+- DELETE: excluir ou desativar informações quando necessário.
+
+As informações enviadas pela API serão trabalhadas no formato JSON.
+
+---
+
+3.2 Cadastro de pacientes
+
+O Back-end deverá permitir o cadastro e a consulta dos pacientes.
+
+Entre as funções previstas estão:
+
+- cadastrar um paciente;
+- consultar pacientes cadastrados;
+- consultar um paciente específico;
+- atualizar os dados;
+- verificar se os campos obrigatórios foram preenchidos;
+- evitar cadastros duplicados quando necessário.
+
+As informações deverão ser tratadas com cuidado, principalmente por envolverem dados relacionados aos pacientes.
+
+---
+
+3.3 Agendamento
+
+O Back-end também será responsável pelos agendamentos.
+
+Será necessário permitir:
+
+- criar um agendamento;
+- consultar agendamentos;
+- alterar um agendamento;
+- cancelar um agendamento;
+- verificar horários disponíveis;
+- evitar que dois agendamentos ocupem o mesmo horário;
+- relacionar o agendamento ao paciente, profissional e unidade.
+
+Antes de confirmar um agendamento, o sistema deverá verificar se as informações estão corretas e se o horário está disponível.
+
+---
+
+3.4 Unidades
+
+O sistema poderá trabalhar com mais de uma unidade da clínica.
+
+Por isso, o Back-end deverá levar em consideração a unidade relacionada a cada informação.
+
+Isso é importante para evitar que dados de uma unidade sejam misturados com os dados de outra.
+
+A forma como essas informações serão armazenadas ficará de acordo com a estrutura do banco de dados definida pelo responsável por essa parte.
+
+---
+
+3.5 Usuários e acesso
+
+O Back-end deverá cuidar das operações relacionadas aos usuários do sistema.
+
+Entre elas estão:
+
+- cadastro de usuários, quando necessário;
+- login;
+- verificação dos dados de acesso;
+- controle das permissões;
+- identificação do usuário durante as operações.
+
+Cada usuário deverá ter acesso somente às funções permitidas para o seu perfil.
+
+---
+
+3.6 Regras do sistema
 
 O Back-end será responsável por colocar em prática as regras definidas para o funcionamento do sistema.
 
-Antes de realizar alguma operação, os dados recebidos deverão ser analisados para verificar se estão de acordo com o que foi definido no projeto.
+Alguns exemplos são:
 
-### 2.5 Validação dos dados
+- não permitir agendamento em horário ocupado;
+- verificar se o profissional está disponível;
+- verificar se o paciente existe antes de realizar um agendamento;
+- relacionar o agendamento à unidade correta;
+- verificar se os dados enviados são válidos;
+- controlar alterações e cancelamentos;
+- verificar se o usuário possui permissão para determinada ação.
 
-Os dados recebidos pela API deverão ser validados antes de serem processados.
+---
 
-Algumas das verificações serão:
+3.7 Validação dos dados
 
-* Conferir os campos obrigatórios;
-* Verificar o formato dos dados;
-* Impedir valores que não sejam permitidos;
-* Verificar informações duplicadas quando for necessario;
-* Conferir se os dados seguem as regras do sistema.
+Os dados recebidos pela API deverão ser verificados antes de serem processados.
 
-### 2.6 Tratamento de erros
+Algumas verificações serão:
 
-O sistema também precisa estar preparado para quando alguma coisa não funcionar como esperado.
+- campos obrigatórios;
+- formato dos dados;
+- valores permitidos;
+- informações duplicadas;
+- existência de registros;
+- regras relacionadas aos agendamentos.
 
-Por exemplo, se for feita uma consulta de um registro que não existe ou for enviado algum dado incorreto, o Back-end deverá informar o problema através de uma resposta adequada.
+O objetivo é evitar que informações incorretas sejam inseridas no sistema.
 
-Também serão utilizados os códigos HTTP correspondentes para cada situação.
+---
 
-### 2.7 Integração com o banco de dados
+3.8 Tratamento de erros
 
-A criação e a organização do banco de dados ficará com outro integrante do grupo.
+O sistema deverá informar quando alguma operação não puder ser realizada.
 
-Mesmo assim, o Back-end precisará fazer a comunicação com o banco para conseguir cadastrar, consultar, alterar e excluir as informações utilizadas pelo sistema.
+Por exemplo:
 
-Essa parte será feita de acordo com a estrutura do banco que for definida pelo responsável por essa etapa.
+- paciente não encontrado;
+- agendamento não encontrado;
+- horário já ocupado;
+- dados enviados incorretamente;
+- usuário sem permissão;
+- usuário não autenticado;
+- problema na comunicação com o banco.
 
-### 2.8 Testes
+Para essas situações serão utilizados os códigos HTTP correspondentes.
 
-Durante o desenvolvimento serão realizados testes para verificar se o Back-end está funcionando corretamente.
+Alguns exemplos são:
 
-Serão testados principalmente:
+- 200: operação realizada com sucesso;
+- 201: cadastro realizado;
+- 400: dados incorretos;
+- 401: usuário não autenticado;
+- 403: usuário sem permissão;
+- 404: informação não encontrada;
+- 409: conflito, como um horário já ocupado;
+- 500: erro interno.
 
-* Os endpoints da API;
-* A validação dos dados;
-* O processamento das informações;
-* O tratamento de erros;
-* A comunicação com o banco de dados.
+---
 
-### 2.9 Documentação
+3.9 Comunicação com o banco de dados
 
-Também será feita uma documentação da API para facilitar o entendimento do projeto.
+A parte de criação e organização do banco de dados ficará com outro integrante do grupo.
 
-Nessa documentação serão colocadas informações sobre:
+O Back-end, porém, precisará se comunicar com o banco para conseguir trabalhar com as informações do sistema.
 
-* Endpoints disponíveis;
-* Métodos utilizados;
-* Dados que precisam ser enviados;
-* Respostas esperadas;
-* Possíveis erros.
+Essa comunicação será utilizada para operações como:
 
-## 3. Divisão das responsabilidades
+- cadastrar informações;
+- consultar informações;
+- atualizar informações;
+- excluir ou desativar registros quando necessário;
+- consultar informações relacionadas.
 
-A minha parte no projeto ficará focada no desenvolvimento do Back-end, incluindo a criação da API, implementação das regras do sistema, validação dos dados, tratamento de erros, integração com o banco e realização dos testes.
+A estrutura utilizada pelo Back-end deverá seguir o que for definido pelo responsável pelo banco de dados.
 
-A parte de modelagem e organização do banco de dados ficará com outro integrante do grupo.
+---
 
-Mesmo com essa divisão, será necessario manter uma comunicação entre as duas partes para que o Back-end consiga trabalhar corretamente com o banco.
+3.10 Segurança
 
-## 4. Resultado esperado
+O Back-end deverá seguir as medidas de segurança definidas para o projeto.
 
-Ao final do desenvolvimento, o Back-end deverá estar funcionando como a parte responsável pelo processamento das informações do sistema.
+Entre os principais pontos estão:
 
-Ele deverá receber as solicitações do Front-end, verificar os dados, realizar os processos necessários, acessar o banco de dados quando for preciso e devolver uma resposta adequada para o sistema.
+- autenticação dos usuários;
+- controle de acesso;
+- validação das informações recebidas;
+- proteção dos endpoints;
+- prevenção contra SQL Injection;
+- utilização de conexão segura;
+- controle de tentativas de acesso;
+- registro de operações importantes.
+
+Como o sistema trabalha com informações de pacientes, também deverão ser consideradas as medidas de proteção de dados e as orientações relacionadas à LGPD.
+
+---
+
+3.11 Testes
+
+Serão realizados testes para verificar se o Back-end está funcionando corretamente.
+
+Os testes deverão considerar principalmente:
+
+- funcionamento dos endpoints;
+- cadastro de pacientes;
+- consultas;
+- agendamentos;
+- validação dos dados;
+- regras do sistema;
+- conflitos de horários;
+- tratamento de erros;
+- login e permissões;
+- comunicação com o banco de dados.
+
+---
+
+3.12 Documentação da API
+
+A API também deverá possuir uma documentação para facilitar o entendimento e a integração com o Front-end.
+
+A documentação deverá informar:
+
+- endpoints disponíveis;
+- métodos utilizados;
+- função de cada endpoint;
+- dados que precisam ser enviados;
+- respostas esperadas;
+- possíveis erros.
+
+---
+
+4. Principais recursos da API
+
+Considerando as funcionalidades previstas para o projeto, os principais recursos do Back-end serão:
+
+Recurso| Operações previstas
+Pacientes| Cadastro, consulta e atualização
+Agendamentos| Criação, consulta, alteração e cancelamento
+Unidades| Consulta e relacionamento com os registros
+Profissionais| Consulta e disponibilidade
+Usuários| Login e controle de acesso
+
+Os endpoints definitivos poderão ser definidos posteriormente, de acordo com a organização do projeto e do banco de dados.
+
+---
+
+5. Divisão das responsabilidades
+
+A minha parte no projeto ficará focada no Back-end, utilizando Node.js e Express.
+
+As principais responsabilidades serão a criação e documentação da API, implementação das regras do sistema, validação dos dados, tratamento de erros, comunicação com o banco de dados, segurança da API e realização dos testes.
+
+A criação e organização do banco de dados ficará com outro integrante do grupo.
+
+Mesmo com essa divisão, será necessário manter contato entre as duas partes para que o Back-end consiga utilizar corretamente as informações e relacionamentos definidos no banco.
+
+Também será necessário manter a comunicação com o responsável pelo Front-end para que a API forneça as informações necessárias para o funcionamento da interface.
+
+---
+
+6. Resultado esperado
+
+Ao final do projeto, espera-se que a documentação deixe claro como o Back-end deverá funcionar e quais serão suas responsabilidades dentro do sistema.
+
+O Back-end deverá ser responsável por receber as solicitações do Front-end, verificar os dados, aplicar as regras do sistema, realizar a comunicação com o banco de dados e devolver as respostas necessárias.
+
+Como o projeto tem como objetivo a documentação, este documento representa o planejamento de como o Back-end deverá funcionar caso o sistema seja desenvolvido posteriormente.
