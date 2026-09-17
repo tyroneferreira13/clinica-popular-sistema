@@ -49,6 +49,10 @@ solutech-rede-cuidar/
 │ └── justificativa-tecnica.md
 │
 ├── seguranca-da-informacao/
+│├── checklist-de-deploy-seguro.md
+│├── classificacao-de-dados-e-controle-de-acesso.md
+│├── plano-de-resposta-a-incidentes.md
+│└── priorizacao-por-fases.md
 │
 └── linkedin/ → postagens individuais
 ├── post-cristian.md
