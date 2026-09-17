@@ -1,185 +1,235 @@
-# Escopo Banco de dados
+**Projeto:** Plataforma de Gerenciamento de Clínicas
+
+**Cliente:** Rede Cuidar+
+
+**Responsável:** Cristian (Banco de Dados)
+
+**Data:** Setembro de 2026
+
+---
+
+## Índice
+
+1. [Objetivo](#1-objetivo)
+2. [Entidades e Estrutura de dados](#2-entidades-e-estrutura-de-dados)
+3. [Controle de acesso por tipo de login](#3-controle-de-acesso-por-tipo-de-login)
+4. [Integridade e Consistência dos dados](#4-integridade-e-consistência-dos-dados)
+5. [Backup e Histórico de alterações](#5-backup-e-histórico-de-alterações)
+6. [Relatórios básicos de gestão](#6-relatórios-básicos-de-gestão)
+7. [Suporte a múltiplas unidades](#7-suporte-a-múltiplas-unidades)
+8. [Justificativa do banco relacional](#8-justificativa-do-banco-relacional)
+9. [Divisão de responsabilidades](#9-divisão-de-responsabilidades)
+10. [Resultado esperado](#10-resultado-esperado)
+11. [Riscos caso a função não fosse considerada](#11-riscos-caso-a-função-não-fosse-considerada)
+
+---
 
 ## 1. Objetivo
 
-Estruturar e manter a base de dados da plataforma da Solutech, garantindo que todas as informações da Rede Cuidar+, pacientes, funcionários, agendamentos, horários e histórico de atendimentos, fiquem armazenadas
-de forma organizada, íntegra e acessível para as demais áreas do sistema (front end e back end). O objetivo direto é eliminar o problema relatado pela rede de clínicas: dados espalhados de forma desorganizada.
+Estruturar e manter a base de dados da plataforma da Solutech, garantindo que todas as informações da Rede Cuidar+ pacientes, funcionários, agendamentos, horários e histórico de atendimentos, fiquem armazenadas de forma organizada, íntegra e acessível para as demais áreas do sistema (front-end e back-end).
 
-## 2. O que o Banco de Dados deverá fazer
+> **Objetivo direto:** eliminar o problema relatado pela rede de clínicas, dados espalhados de forma desorganizada.
 
-### 2.1 Armazenamento de dados dos funcionários e pacientes
+---
 
-* Nome, cargo/função na clínica (ex: recepção, profissional de saúde), e permissões de acesso ao sistema.
-* Vincular cada funcionário aos agendamentos pelos quais é responsável, permitindo montar a agenda individual de cada um.
-* Nome, contato (telefone/e-mail), data de nascimento, e demais dados de cadastro necessários para identificação.
-* Vincular cada paciente ao seu próprio histórico de agendamentos e resultados, de forma que essas informações nunca se misturem com as de outro paciente.
+## 2. Entidades e Estrutura de dados
 
-### 2.2 Gerenciar agendamentos
+### 2.1 Funcionários e Pacientes
 
-É necessário registrar a data, o horário, o paciente, o funcionário responsável e o tipo de procedimento de cada agendamento. Também é preciso manter um status atualizado para cada agendamento, 
-como: confirmado, pendente, em andamento, concluído ou cancelado. Esse status será utilizado para determinar quais informações e agendamentos serão exibidos na tela do paciente e na tela do funcionário.
-Além disso, o sistema deve garantir que dois agendamentos não possam ocupar o mesmo horário para o mesmo profissional, estabelecendo uma regra de integridade que impeça conflitos de horários, conforme o problema identificado originalmente.
+| Entidade | Dados armazenados | Vínculo obrigatório |
+|----------|-------------------|----------------------|
+| **Funcionário** | Nome, cargo/função (recepção, profissional de saúde etc.) e permissões de acesso ao sistema | Vinculado aos agendamentos pelos quais é responsável, permitindo montar sua agenda individual |
+| **Paciente** | Nome, contato (telefone/e-mail), data de nascimento e demais dados de cadastro | Vinculado ao seu próprio histórico de agendamentos e resultados, sem se misturar com o de outro paciente |
 
-### 2.3 Controlar a disponibilidade de horários
+### 2.2 Agendamentos
 
-Para garantir o funcionamento correto dos agendamentos também é preciso controlar os horários das seguintes formas:
+| Campo obrigatório | Detalhe |
+|--------------------|---------|
+| Data e horário | Momento do atendimento |
+| Paciente | Quem será atendido |
+| Funcionário responsável | Quem realizará o atendimento |
+| Tipo de procedimento | Serviço a ser prestado |
+| Status | `confirmado` \| `pendente` \| `em andamento` \| `concluído` \| `cancelado` |
 
-* Manter uma tabela de horários disponíveis por funcionário/profissional, para que o sistema saiba quando é possível marcar uma nova consulta.
-* Atualizar automaticamente a disponibilidade sempre que um agendamento for criado, remarcado ou cancelado.
+O status é utilizado para determinar quais informações são exibidas na tela do paciente e na do funcionário.
 
-### 2.4 Guardar histórico e resultados de procedimentos
+> **Regra de integridade crítica:** dois agendamentos não podem ocupar o mesmo horário para o mesmo profissional.
 
-O sistema deve manter o histórico dos procedimentos realizados por cada paciente, permitindo consultar posteriormente os atendimentos que já foram concluídos.
+### 2.3 Disponibilidade de Horários
 
-Após a conclusão do procedimento, o paciente poderá visualizar o resultado e as observações disponibilizadas para ele em sua área do sistema, 
-enquanto o funcionário poderá registrar ou consultar essas informações de acordo com suas permissões de acesso.
+-  Tabela de horários disponíveis por funcionário/profissional, para o sistema saber quando é possível marcar uma nova consulta.
+-  Atualização automática da disponibilidade sempre que um agendamento for **criado**, **remarcado** ou **cancelado**.
 
-Para cada procedimento realizado, devem ser armazenadas informações como:
+### 2.4 Histórico e Resultados de procedimentos
 
-* Paciente ao qual o procedimento está vinculado
-* Data e horário da realização
-* Funcionário responsável pelo atendimento
-* Tipo de procedimento realizado
-* Status do procedimento, indicando se foi concluído
-* Resultado, observação ou informações relevantes registradas pelo funcionário
+Para cada procedimento realizado, devem ser armazenadas as seguintes informações:
 
-Os resultados e observações devem permanecer vinculados ao respectivo atendimento, evitando que informações de diferentes procedimentos sejam misturadas.
+| Informação | Descrição |
+|------------|-----------|
+| Paciente | A quem o procedimento está vinculado |
+| Data e horário | Momento da realização |
+| Funcionário responsável | Quem executou o atendimento |
+| Tipo de procedimento | Procedimento realizado |
+| Status | Indica se o procedimento foi concluído |
+| Resultado/observações | Informações relevantes registradas pelo funcionário |
 
-### 2.5 Separar as informações de acordo com o tipo de login
+-  **Paciente:** pode visualizar o resultado e as observações disponibilizadas em sua área do sistema, após a conclusão do procedimento.
+-  **Funcionário:** pode registrar ou consultar essas informações de acordo com suas permissões.
 
-O sistema deve possuir controle de acesso baseado no tipo de usuário, garantindo que cada pessoa visualize somente as informações necessárias para sua função.
+>  Resultados e observações devem permanecer vinculados ao respectivo atendimento, evitando que informações de diferentes procedimentos se misturem.
 
-A área do paciente deve permitir o acesso somente às suas próprias informações, como:
+### 2.5 Fila de espera
 
-* Seus dados cadastrais
-* Seus agendamentos
-* Status dos procedimentos
-* Histórico de atendimentos
-* Resultados e observações que estejam disponíveis para visualização
+Estrutura para registrar pacientes que não encontraram horário disponível e desejam aguardar uma vaga.
 
-Já a área do funcionário deve permitir o acesso aos agendamentos e informações necessárias para a realização dos atendimentos sob sua responsabilidade. 
-Dependendo do cargo ou nível de permissão, o funcionário poderá consultar apenas seus próprios atendimentos ou os agendamentos de toda a clínica.
+| Campo | Descrição |
+|-------|-----------|
+| Paciente | Quem está na fila |
+| Unidade | Clínica desejada |
+| Especialidade | Tipo de atendimento buscado |
+| Profissional desejado | Preferência de funcionário |
+| Preferência de data/horário | Janela desejada pelo paciente |
+| Status da solicitação | Situação atual do pedido |
 
-Dessa forma, o sistema evita que um paciente tenha acesso aos dados de outro paciente ou que um funcionário visualize informações que não fazem parte de suas responsabilidades.
+>  Quando surgir uma vaga compatível, o sistema pode usar essas informações para notificar o paciente.
 
-### 2.6 Garantir integridade e consistência dos dados
+### 2.6 Consentimento (LGPD)
 
-O sistema deve possuir regras que garantam que os dados armazenados sejam corretos, consistentes e não sejam duplicados ou registrados de forma incorreta.
+O banco deve armazenar o registro de consentimento do paciente para uso e tratamento de seus dados.
 
-Entre as principais regras, estão:
+| Campo | Descrição |
+|-------|-----------|
+| Data e hora do consentimento | Momento em que foi registrado |
+| Versão dos termos/política aceita | Rastreabilidade de qual versão foi consentida |
+| Status do consentimento | Situação atual (aceito, revogado etc.) |
 
-* Evitar a duplicidade de cadastros de pacientes, utilizando informações que permitam identificar um paciente já existente
-* Garantir que cada agendamento esteja obrigatoriamente vinculado a um paciente, funcionário responsável, data, horário e tipo de procedimento
-* Impedir que sejam criados agendamentos sem os dados obrigatórios
-* Garantir que dois agendamentos não ocupem o mesmo horário para o mesmo profissional
-* Manter relacionamentos claros entre as informações do sistema.
+>  Mantém evidências que auxiliam na demonstração de conformidade com a LGPD.
 
-A estrutura dos dados deve seguir uma relação lógica, por exemplo:
+---
 
+## 3. Controle de acesso por tipo de login
+
+O sistema deve separar as informações conforme o tipo de usuário, garantindo que cada pessoa visualize apenas o necessário para sua função.
+
+| Perfil | Acesso permitido |
+|--------|-------------------|
+| **Paciente** | Seus dados cadastrais, seus agendamentos, status dos procedimentos, histórico de atendimentos e resultados/observações disponíveis para visualização |
+| **Funcionário (padrão)** | Agendamentos e informações necessárias para os atendimentos sob sua responsabilidade |
+| **Funcionário (permissão ampliada)** | Dependendo do cargo/nível de permissão, agendamentos de toda a clínica |
+
+>  Um paciente nunca acessa dados de outro paciente, e um funcionário nunca visualiza informações fora de suas responsabilidades.
+
+---
+
+## 4. Integridade e Consistência dos dados
+
+O sistema deve possuir regras que garantam que os dados armazenados sejam corretos, consistentes e não duplicados:
+
+- [ ] Evitar duplicidade de cadastros de pacientes, identificando pacientes já existentes
+- [ ] Garantir que todo agendamento esteja vinculado a paciente, funcionário responsável, data, horário e tipo de procedimento
+- [ ] Impedir a criação de agendamentos sem os dados obrigatórios
+- [ ] Garantir que dois agendamentos não ocupem o mesmo horário para o mesmo profissional
+- [ ] Manter relacionamentos claros entre as informações do sistema
+
+**Estrutura lógica dos dados:**
+
+```
 Paciente → Agendamento → Data/Horário → Funcionário → Procedimento → Resultado
+```
 
-Essa organização evita a existência de informações "soltas" ou sem vínculo com um paciente ou atendimento específico e facilita a consulta, atualização e manutenção dos dados.
+> Essa organização evita informações "soltas" ou sem vínculo com um paciente ou atendimento específico, facilitando consulta, atualização e manutenção.
 
-### 2.7 Prever backup e histórico de alterações
+---
 
-O sistema deve possuir mecanismos básicos para proteger os dados contra perda, exclusão acidental ou falhas no sistema, especialmente por se tratar de informações relacionadas a atendimentos e histórico de pacientes.
-Por isso deve ser definida uma rotina de backup periódico do banco de dados, permitindo a recuperação das informações caso ocorra algum problema.
+## 5. Backup e Histórico de alterações
 
-### 2.8 Apoiar relatórios básicos de gestão
+O sistema deve possuir mecanismos básicos para proteger os dados contra perda, exclusão acidental ou falhas, especialmente por envolver histórico de pacientes.
 
-A estrutura do banco de dados deve ser planejada de forma que as informações armazenadas possam ser utilizadas futuramente para consultas e relatórios de acompanhamento da clínica.
+>  **Rotina necessária:** backup periódico do banco de dados, permitindo a recuperação das informações em caso de problema.
 
-Os dados dos agendamentos, procedimentos e atendimentos devem permitir a geração de relatórios básicos, como:
+---
 
-* Quantidade de atendimentos realizados em determinado período
-* Quantidade de agendamentos por funcionário
-* Procedimentos mais realizados
-* Quantidade de agendamentos cancelados
-* Quantidade de pacientes que não compareceram
-* Quantidade de atendimentos concluídos, pendentes ou em andamento
-* Histórico de atendimentos por período
-* Quantidade de atendimentos por tipo de procedimento
+## 6. Relatórios básicos de gestão
 
-Esses relatórios poderão auxiliar a gestão da clínica na análise da demanda, acompanhamento da produtividade, identificação de faltas e cancelamentos e tomada de decisões administrativas.
+A estrutura do banco deve ser planejada para permitir, futuramente, consultas e relatórios de acompanhamento da clínica, como:
 
-### 2.9 Suportar múltiplas unidades da rede
+- [ ] Quantidade de atendimentos realizados em determinado período
+- [ ] Quantidade de agendamentos por funcionário
+- [ ] Procedimentos mais realizados
+- [ ] Quantidade de agendamentos cancelados
+- [ ] Quantidade de pacientes que não compareceram
+- [ ] Quantidade de atendimentos concluídos, pendentes ou em andamento
+- [ ] Histórico de atendimentos por período
+- [ ] Quantidade de atendimentos por tipo de procedimento
 
-Como o sistema será utilizado por uma rede de clínicas, o banco de dados deve permitir o cadastro e o gerenciamento de várias unidades. Cada agendamento, funcionário e horário disponível deverá estar 
-vinculado à respectiva unidade.
+>  Esses relatórios auxiliam a gestão na análise de demanda, produtividade, faltas/cancelamentos e tomada de decisão.
 
-Essa estrutura evita que um paciente visualize ou agende horários pertencentes a uma unidade diferente daquela em que deseja ser atendido. 
-Também facilita a gestão individualizada de funcionários, agendas e atendimentos por unidade.
+---
 
-### 2.10 Gerenciar fila de espera
+## 7. Suporte a múltiplas unidades
 
-O banco de dados deverá possuir uma estrutura para registrar pacientes que não encontraram horários disponíveis e desejam entrar em uma fila de espera.
+Como o sistema atenderá uma **rede** de clínicas, o banco de dados deve permitir o cadastro e gerenciamento de várias unidades.
 
-A fila deverá armazenar informações como:
+-  Cada agendamento, funcionário e horário disponível deve estar vinculado à sua respectiva unidade.
+-  Evita que um paciente visualize ou agende horários de uma unidade diferente da desejada.
+-  Facilita a gestão individualizada de funcionários, agendas e atendimentos por unidade.
 
-* paciente
-* unidade
-* especialidade
-* profissional desejado
-* preferência de data/horário
-* status da solicitação
+---
 
-Quando surgir uma vaga compatível, o sistema poderá utilizar essas informações para realizar a notificação do paciente.
+## 8. Justificativa do banco relacional
 
-### 2.11 Registrar dados de consentimento (LGPD)
+Recomenda-se, hipoteticamente, o uso de um **banco de dados relacional (SQL)**, pois as informações possuem estrutura definida e relações claras entre entidades.
 
-Além dos mecanismos de segurança e proteção dos dados, o banco deverá armazenar o registro de consentimento do paciente para utilização e tratamento de seus dados.
+```
+Paciente   1 ──── N   Agendamento
+Agendamento 1 ──── 1   Unidade
+Agendamento 1 ──── 1   Horário
+Funcionário N ──── 1   Unidade
+```
 
-Podem ser registrados, por exemplo, a data e hora do consentimento, a versão dos termos ou política de privacidade aceita e o status do consentimento. 
-Dessa forma, o sistema mantém evidências que auxiliam na demonstração de conformidade com a LGPD.
+> Esses relacionamentos podem ser representados de forma eficiente por tabelas relacionadas com chaves primárias e estrangeiras.
 
-### 2.12 Justificar a escolha do banco de dados relacional
+---
 
-Para o projeto, recomenda-se a utilização hipotética de um banco de dados relacional (SQL), pois as informações possuem estrutura definida e relações claras entre as entidades.
+## 9. Divisão de responsabilidades
 
-Por exemplo, um paciente pode possuir vários agendamentos, um agendamento pertence a uma unidade e a um horário, e funcionários podem estar vinculados a determinadas unidades. 
-Esse tipo de relacionamento pode ser representado de forma eficiente por tabelas relacionadas e chaves primárias e estrangeiras.
+| Frente | Responsabilidade |
+|--------|-------------------|
+| **Modelagem** | Criar o diagrama de entidade-relacionamento e definir como as entidades se relacionam (ex.: paciente com unidade preferencial, mas podendo agendar em outras unidades) |
+| **Estrutura das tabelas** | Definir os campos de cada tabela (nome, contato e unidade do paciente; data, horário, status e motivo de cancelamento do agendamento; estrutura da fila de espera) |
+| **Integridade e consistência** | Evitar agendamentos duplicados/conflitantes, prevenir cadastros repetidos e garantir que nenhum registro fique sem vínculo |
+| **Multi-unidade** | Garantir que agendamentos, horários e funcionários estejam corretamente associados à sua unidade, evitando mistura de dados entre clínicas |
+| **Alinhamento com Segurança da Informação** | Ajudar a identificar dados sensíveis (ex.: resultados de procedimentos) e estruturar o registro de consentimento LGPD |
+| **Alinhamento com Back-end** | Definir quais dados cada tela do sistema precisa consultar/alterar (painel do funcionário, área do paciente, fila de espera) e o formato de permissão por tipo de usuário |
+| **Suporte a relatórios de gestão** | Organizar os dados para permitir métricas por unidade e motivos de cancelamento |
+| **Documentação** | Justificar tecnicamente o tipo de banco escolhido e documentar toda a estrutura de forma clara, sem depender de explicação oral da equipe |
 
-## 3. Divisão das responsabilidades
+---
 
-A responsabilidade central dessa função de Banco de Dados é modelar toda a estrutura de dados da plataforma, criando o diagrama de entidade-relacionamento, além de definir como essas entidades se relacionam entre si. 
-Por exemplo, um paciente pode ter uma unidade preferencial, mas também pode agendar em outras unidades da rede, e cada agendamento está sempre vinculado a um horário, um funcionário responsável e uma unidade específica.
+## 10. Resultado esperado
 
-A partir dessa modelagem, cabe também definir a estrutura das tabelas propriamente ditas, especificando os campos necessários 
-em cada uma, como nome, contato e unidade vinculada no caso do paciente, ou data, horário, status e motivo de cancelamento no caso do agendamento, incluindo a estrutura da fila de espera, 
-que conecta paciente, unidade e horário desejado.
+Entrega de uma estrutura de dados **coerente, segura, organizada e bem documentada**, capaz de sustentar toda a plataforma da Solutech para a Rede Cuidar+.
 
-Outra responsabilidade importante é garantir a integridade e a consistência dos dados, evitando agendamentos duplicados ou conflitantes no mesmo horário de um 
-mesmo profissional, prevenindo cadastros repetidos de pacientes e funcionários, e assegurando que nenhum registro fique solto sem seus devidos vínculos. 
-Como a proposta envolve uma rede de clínicas e não uma unidade isolada, também é responsabilidade dessa função garantir que agendamentos, horários e funcionários estejam corretamente associados à sua 
-respectiva unidade, evitando que informações de clínicas diferentes se misturem e acabem causando uma desorganização geral dos dados e dos atendimentos.
+-  Armazenamento correto das informações, sem duplicidade e sem dados soltos ou desconectados.
+-  Cada funcionário visualiza sua própria agenda, sem sobreposição de horários.
+-  Cada paciente acessa corretamente seus agendamentos em andamento, histórico de atendimentos e resultados de procedimentos concluídos.
+-  Dados corretamente segmentados por unidade, sem mistura entre clínicas.
+-  Fila de espera funcionando como solução real para casos sem horário disponível no momento do agendamento.
 
-O Banco de Dados também precisa atuar em conjunto com a Segurança da Informação, ajudando a identificar quais dados são sensíveis e exigem proteção redobrada, 
-como os resultados de procedimentos, e estruturando o registro de consentimento do paciente em relação à LGPD. Da mesma forma, é necessário alinhamento constante com o Back-end, 
-definindo quais dados cada tela do sistema precisa consultar ou alterar, seja no painel do funcionário, na área do paciente ou na fila de espera, além do formato de 
-permissão de acesso conforme o tipo de usuário.
+---
 
-Por fim, essa função é responsável por dar suporte a futuros relatórios de gestão, organizando os dados de forma que seja possível, 
-por exemplo, medir atendimentos por unidade ou motivos de cancelamento. Também é preciso justificar tecnicamente a escolha do tipo de banco de dados utilizado no projeto, e documentar toda essa estrutura
-de forma clara, de modo que qualquer pessoa consiga compreender a lógica do banco sem depender de explicação oral da equipe.
+## 11. Riscos caso a função não fosse considerada
 
-## 4. Resultado esperado
+>  Sem uma função dedicada ao Banco de Dados, o projeto correria o risco de **reproduzir dentro do sistema o mesmo problema** que a Rede Cuidar+ já enfrenta hoje.
 
-O resultado esperado dessa função é a entrega de uma estrutura de dados coerente, segura, organizada e bem documentada, capaz de sustentar toda a plataforma da Solutech para a Rede Cuidar+. Isso significa que o sistema deve ser capaz de armazenar corretamente as 
-informações, sem duplicidade e sem dados soltos ou desconectados entre si.
+-  Informações de pacientes, agendamentos e horários poderiam ficar desorganizadas, duplicadas ou sem vínculo entre si, gerando os mesmos (ou novos) conflitos, agora dentro da própria plataforma.
+-  O **Back-end** ficaria sem uma base confiável para consultar e gravar informações.
+-  A **Segurança da Informação** teria dificuldade em proteger dados sensíveis sem saber exatamente onde e como estão estruturados.
+-  Por se tratar de uma rede de clínicas, poderia haver mistura de dados entre unidades diferentes, com pacientes visualizando horários ou históricos que não pertencem à sua clínica.
 
-Espera-se também que essa estrutura elimine, na prática, o problema relatado pelo cliente, permitindo que cada funcionário visualize sua própria agenda sem sobreposição de horários, e que cada 
-paciente acesse corretamente seus agendamentos em andamento, seu histórico de atendimentos e os resultados de procedimentos já concluídos.
+> No fim, o projeto perderia justamente aquilo que sustenta a confiabilidade da solução, uma base de dados sólida, comprometendo a proposta como um todo, mesmo com front-end, segurança e demais áreas bem desenvolvidas.
 
-Como a proposta envolve uma rede de clínicas, também é esperado que os dados estejam corretamente segmentados por unidade, garantindo que informações de uma clínica 
-não se misturem com as de outra, e que a fila de espera funcione como uma solução real para os casos em que não há horário disponível no momento do agendamento.
+---
 
-## 5. O que poderia acontecer com o projeto caso o Banco de Dados não fosse considerada
-
-Sem uma função dedicada ao Banco de Dados, o projeto correria o risco de reproduzir exatamente o problema que a Rede Cuidar+ já enfrenta hoje, apenas transportado para dentro do sistema. Sem uma estrutura de dados bem definida, as 
-informações de pacientes, agendamentos e horários poderiam ficar desorganizadas, duplicadas ou sem vínculo entre si, o que voltaria a gerar os mesmos e até novos conflitos, só que agora dentro de uma plataforma que deveria justamente resolver isso.
-
-Se de fato fosse desconsiderada essa função iria comprometer o trabalho de outras áreas do projeto. O Back-end ficaria sem uma base confiável para consultar e gravar informações. 
-A Segurança da Informação teria dificuldade em proteger dados sensíveis de pacientes sem saber exatamente onde e como eles estão estruturados.
-
-Além disso, como a proposta envolve uma rede de clínicas e não uma unidade isolada, a falta dessa função poderia levar à mistura de dados entre unidades diferentes, com pacientes visualizando horários ou históricos que não pertencem à sua clínica. No fim, o projeto perderia justamente aquilo que sustenta toda a confiabilidade da solução, uma base de dados sólida, e isso comprometeria a proposta como um todo, mesmo que front-end, segurança e demais áreas estivessem bem desenvolvidas.
-
+**Versão:** 1.0
+**Última Atualização:** Setembro de 2026
